@@ -27,6 +27,7 @@ class StPicoEvent;
 
 class StHFPair;
 class StHFTriplet;
+class StHFQuadruplet;
 
 class StPicoHFEvent : public TObject
 {
@@ -40,6 +41,7 @@ public:
    // -- add pair or triplet to the event
    void  addHFSecondaryVertexPair(StHFPair const*);
    void  addHFSecondaryVertexTriplet(StHFTriplet const*);
+   void  addHFSecondaryVertexQuadruplet(StHFQuadruplet const*);
    void  addHFTertiaryVertexPair(StHFPair const*);
 
    // -- get array with particles from secondary and tertiary vertex
