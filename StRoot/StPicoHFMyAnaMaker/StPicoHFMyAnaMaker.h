@@ -92,6 +92,7 @@ class StPicoHFMyAnaMaker : public StPicoHFMaker
   int createCandidates();
   int analyzeCandidates();
   virtual bool isCloseTracks(StPicoTrack const*, StPicoTrack const*,StThreeVectorF const & , float) const;
+  virtual bool isVertexGoodTrack(StPicoTrack const*, StThreeVectorF const & , float) const;
   // -- private members --------------------------
 
   unsigned int mDecayChannel;

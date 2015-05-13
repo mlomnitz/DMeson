@@ -89,28 +89,30 @@ int StPicoHFMyAnaMaker::createCandidates() {
   // -- Decay channel D0 4 decay --- EXAMPLE
   if (mDecayChannel == StPicoHFMyAnaMaker::kChannel1) {
 
-    for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
-      StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
-      if( !isKaon(kaon) ) continue;
-      if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
+    for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
+      StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
+      if( !isPion(pion1) ) continue;
+      if (! isVertexGoodTrack(pion1, mPrimVtx, mBField) ) continue;
+	  
+      for (unsigned short idxPion2 = 0; idxPion2 < mIdxPicoPions.size(); ++idxPion2) {
+	StPicoTrack const *pion2 = mPicoDst->track(mIdxPicoPions[idxPion2]);
+	if( !isPion(pion2) ) continue;
+	if (! isVertexGoodTrack(pion2, mPrimVtx, mBField) ) continue;
 
-      for (unsigned short idxPion1 = 0; idxPion1 < mIdxPicoPions.size(); ++idxPion1) {
-	StPicoTrack const *pion1 = mPicoDst->track(mIdxPicoPions[idxPion1]);
-	if( !isPion(pion1) ) continue;
-	if ( !isCloseTracks(kaon, pion1,mPrimVtx, mBField)) continue;
+	for (unsigned short idxPion3 = 0; idxPion3 < mIdxPicoPions.size(); ++idxPion3) {
+	  StPicoTrack const *pion3 = mPicoDst->track(mIdxPicoPions[idxPion3]);
+	  int const pi_charge = pion1->charge()*pion2->charge()*pion3->charge();
+	  if( TMath::Abs(pi_charge)!=1) continue;
+	  if( !isPion(pion3) ) continue;
+	  if (! isVertexGoodTrack(pion3, mPrimVtx, mBField) ) continue;
 
-	for (unsigned short idxPion2 = 0; idxPion2 < mIdxPicoPions.size(); ++idxPion2) {
-	  StPicoTrack const *pion2 = mPicoDst->track(mIdxPicoPions[idxPion2]);
-	  if( !isPion(pion2) ) continue;
-	  if ( !isCloseTracks(pion1,pion2,mPrimVtx, mBField)) continue;
-
-	  for (unsigned short idxPion3 = 0; idxPion3 < mIdxPicoPions.size(); ++idxPion3) {
-	    StPicoTrack const *pion3 = mPicoDst->track(mIdxPicoPions[idxPion3]);
-	    if( kaon->charge() == (pion1->charge()+pion2->charge()+pion3->charge()) ||
-		(pion1->charge()*pion2->charge()*pion3->charge()) == 1) continue;
-	    if( !isPion(pion3) ) continue;
-	    if ( !isCloseTracks(pion2,pion3,mPrimVtx, mBField)) continue;
-
+	  for (unsigned short idxKaon = 0; idxKaon < mIdxPicoKaons.size(); ++idxKaon) {
+	    StPicoTrack const *kaon = mPicoDst->track(mIdxPicoKaons[idxKaon]);
+	    if (kaon->charge() == pi_charge) continue;
+	    if( !isKaon(kaon) ) continue;
+	    if( !mHFCuts->isHybridTOFHadron(kaon, mHFCuts->getTofBetaBase(kaon), StHFCuts::kKaon) ) continue;
+	    if (! isVertexGoodTrack(kaon, mPrimVtx, mBField) ) continue;
+	    
 	    StHFQuadruplet quad(pion1, pion2, pion3, kaon,
 				mHFCuts->getHypotheticalMass(StHFCuts::kPion), mHFCuts->getHypotheticalMass(StHFCuts::kPion),
 				mHFCuts->getHypotheticalMass(StHFCuts::kPion),mHFCuts->getHypotheticalMass(StHFCuts::kKaon),
@@ -247,4 +249,10 @@ bool StPicoHFMyAnaMaker::isCloseTracks(StPicoTrack const * const trk1, StPicoTra
 // -- good pair
   return true;
 }
-
+// _________________________________________________________
+bool StPicoHFMyAnaMaker::isVertexGoodTrack(StPicoTrack const * const trk1, StThreeVectorF const & vtx, float bField) const {
+  StPhysicalHelixD p1Helix = trk1->dcaGeometry().helix();
+  p1Helix.moveOrigin(p1Helix.pathLength(vtx));
+  if( ( p1Helix.origin()-vtx ).mag()>0.02) return false;
+  return true;
+}

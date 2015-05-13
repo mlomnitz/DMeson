@@ -157,7 +157,7 @@ void runPicoHFMyAnaMaker(const Char_t *inputFile="test.list", const Char_t *outp
   hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon);
   hfCuts->setCutPtotRangeHybridTOF(0.6,2.0,StHFCuts::kKaon);
   //Reco particle
-  hfCuts->setCutSecondaryQuadruplet(0.08,
+  hfCuts->setCutSecondaryQuadruplet(0.01,
 				    0, 0.05, 				 
 				    0.995, 1.7, 2.1,
 				    0.004, 0.004, 0.004,0.004);
@@ -170,8 +170,11 @@ void runPicoHFMyAnaMaker(const Char_t *inputFile="test.list", const Char_t *outp
   int total = picoDstMaker->chain()->GetEntries();
   cout << " Total entries = " << total << endl;
   if(nEvents>total) nEvents = total;
-
+  // TEST
+  nEvents = 10;
   for (Int_t i=0; i<nEvents; i++) {
+    // TEST 
+    cout << "Working on eventNumber " << i << endl;
     if(i%10000==0)
       cout << "Working on eventNumber " << i << endl;
     
