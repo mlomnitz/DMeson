@@ -138,12 +138,29 @@ void runPicoHFMyAnaMaker(const Char_t *inputFile="test.list", const Char_t *outp
   // ---------------------------------------------------
 
   // -- Channel1
-  picoHFMyAnaMaker->setDecayMode(StPicoHFEvent::kTwoParticleDecay);
+  picoHFMyAnaMaker->setDecayMode(StPicoHFEvent::kFourParticleDecay);
   picoHFMyAnaMaker->setDecayChannel(StPicoHFMyAnaMaker::kChannel1);
 
   // -- ADD USER CUTS HERE ----------------------------
-
-
+  //Track and Event cuts
+  hfCuts->setCutVzMax(6.);
+  hfCuts->setCutVzVpdVzMax(3.);
+  hfCuts->setCutNHitsFitMax(15); 
+  hfCuts->setCutRequireHFT(true);
+  hfCuts->setCutPtRange(0.8,2.0,StHFCuts::kPion);
+  hfCuts->setCutPtRange(0.6,2.0,StHFCuts::kKaon);
+  //PID
+  //TPC setters
+  hfCuts->setCutTPCNSigmaPion(3.0);
+  hfCuts->setCutTPCNSigmaKaon(3.0);
+  //TOF setters, need to set pt range as well
+  hfCuts->setCutTOFDeltaOneOverBeta(0.05, StHFCuts::kKaon);
+  hfCuts->setCutPtotRangeHybridTOF(0.6,2.0,StHFCuts::kKaon);
+  //Reco particle
+  hfCuts->setCutSecondaryQuadruplet(0.08,
+				    0, 0.05, 				 
+				    0.995, 1.7, 2.1,
+				    0.004, 0.004, 0.004,0.004);
   // ========================================================================================
 
   // ========================================================================================

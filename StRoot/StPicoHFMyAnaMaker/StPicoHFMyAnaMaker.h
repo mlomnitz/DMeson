@@ -2,7 +2,7 @@
 #define StPicoHFMyAnaMaker_h
 
 #include "StPicoHFMaker/StPicoHFMaker.h"
-
+#include "TNtuple.h"
 /* **************************************************
  *  Sample class fo HF picoDST analysis
  * --------------------------------------------------
@@ -63,6 +63,7 @@ class StPicoHFEvent;
 
 class StHFPair;
 class StHFTriplet;
+class StHFQuadruplet;
 class StHFCuts;
 
 class StPicoHFMyAnaMaker : public StPicoHFMaker 
@@ -79,7 +80,7 @@ class StPicoHFMyAnaMaker : public StPicoHFMaker
   
   // -- ADOPT DECAY CHANNELS, if wished ------------------- 
   void setDecayChannel(unsigned int u) { mDecayChannel = u; }
-
+  
   enum eDecayChannel {kChannel1, kChannel2, kChannel3};
 
  protected:
@@ -90,13 +91,13 @@ class StPicoHFMyAnaMaker : public StPicoHFMaker
  private:
   int createCandidates();
   int analyzeCandidates();
-
+  virtual bool isCloseTracks(StPicoTrack const*, StPicoTrack const*,StThreeVectorF const & , float) const;
   // -- private members --------------------------
 
   unsigned int mDecayChannel;
-
+  
   // -- ADD USER MEMBERS HERE ------------------- 
-
+  TNtuple *ntp_DMeson;
 
 
 
