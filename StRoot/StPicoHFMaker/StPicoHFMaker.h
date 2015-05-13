@@ -61,6 +61,7 @@ class StPicoTrack;
 class StPicoHFEvent;
 class StHFPair;
 class StHFTriplet;
+class StHFQuadruplet;
 class StHFCuts;
 class StHFHists;
 

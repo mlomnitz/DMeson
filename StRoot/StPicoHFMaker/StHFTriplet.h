@@ -65,6 +65,8 @@ class StHFTriplet : public TObject
   float px() const;
   float py() const;
   float pz() const;
+  // Lomnitz: Max dist between daughter v0's
+  float dV0Max() const;
 
  private:
   StHFTriplet(StHFTriplet const &);
@@ -88,7 +90,8 @@ class StHFTriplet : public TObject
   float mDcaDaughters31;
 
   float mCosThetaStar; 
-  
+  // Lomnitz: Max dist between daughter v0's
+  float mdV0Max;
   ClassDef(StHFTriplet,2)
 };
 inline StLorentzVectorF const & StHFTriplet::lorentzVector() const { return mLorentzVector;}
@@ -115,4 +118,7 @@ inline StThreeVectorF const & StHFTriplet::decayVertex() const { return mDecayVe
 inline float StHFTriplet::v0x() const { return mDecayVertex.x();}
 inline float StHFTriplet::v0y() const { return mDecayVertex.y();}
 inline float StHFTriplet::v0z() const { return mDecayVertex.z();}
+// Lomnitz: Max dist between daughter v0's
+inline float StHFTriplet::dV0Max()         const { return mdV0Max; }
+
 #endif

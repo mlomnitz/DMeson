@@ -19,6 +19,7 @@
 #include "StPicoHFMaker.h"
 #include "StHFPair.h"
 #include "StHFTriplet.h"
+#include "StHFQuadruplet.h"
 
 ClassImp(StPicoHFMaker)
 
@@ -181,7 +182,6 @@ Int_t StPicoHFMaker::Make() {
   // -- isPion, isKaon, isProton methods are to be 
   //    implemented by daughter class (
   //    -> methods of StHFCuts can and should be used
-
   if (!mPicoDstMaker) {
     LOG_WARN << " StPicoHFMaker - No PicoDstMaker! Skip! " << endm;
     return kStWarn;
@@ -205,7 +205,6 @@ Int_t StPicoHFMaker::Make() {
   } // if (mMakerMode == StPicoHFMaker::kRead) {
   
   Int_t iReturn = kStOK;
-
   if (setupEvent()) {
     UInt_t nTracks = mPicoDst->numberOfTracks();
 

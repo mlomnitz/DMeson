@@ -53,7 +53,7 @@ public:
    Int_t eventId() const;
 
    // -- different event/decay modes
-   enum eHFEventMode {kTwoParticleDecay, kThreeParticleDecay,kTwoAndTwoParticleDecay };
+   enum eHFEventMode {kTwoParticleDecay, kThreeParticleDecay,kTwoAndTwoParticleDecay , kFourParticleDecay};
 
 private:
 

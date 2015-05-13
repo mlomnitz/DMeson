@@ -20,6 +20,7 @@
 
 #include "StHFPair.h"
 #include "StHFTriplet.h"
+#include "StHFQuadruplet.h"
 
 ClassImp(StHFCuts)
 
@@ -44,7 +45,11 @@ StHFCuts::StHFCuts()
   mSecondaryTripletDcaDaughters31Max(std::numeric_limits<float>::max()), 
   mSecondaryTripletDecayLengthMin(std::numeric_limits<float>::min()), mSecondaryTripletDecayLengthMax(std::numeric_limits<float>::max()), 
   mSecondaryTripletCosThetaMin(std::numeric_limits<float>::min()), 
-  mSecondaryTripletMassMin(std::numeric_limits<float>::min()), mSecondaryTripletMassMax(std::numeric_limits<float>::max()) {
+  mSecondaryTripletMassMin(std::numeric_limits<float>::min()), mSecondaryTripletMassMax(std::numeric_limits<float>::max()),
+//Lomnitz
+  mSecondaryTripletDcaDaughters1Vtx(std::numeric_limits<float>::min()), mSecondaryTripletDcaDaughters2Vtx(std::numeric_limits<float>::min()),
+  mSecondaryTripletDcaDaughters3Vtx(std::numeric_limits<float>::min())
+{
   // -- default constructor
 
   for (Int_t idx; idx < kHFPIDMax; ++idx) {
@@ -87,7 +92,11 @@ StHFCuts::StHFCuts(const Char_t *name)
   mSecondaryTripletDcaDaughters31Max(std::numeric_limits<float>::max()), 
   mSecondaryTripletDecayLengthMin(std::numeric_limits<float>::min()), mSecondaryTripletDecayLengthMax(std::numeric_limits<float>::max()), 
   mSecondaryTripletCosThetaMin(std::numeric_limits<float>::min()), 
-  mSecondaryTripletMassMin(std::numeric_limits<float>::min()), mSecondaryTripletMassMax(std::numeric_limits<float>::max()) {
+  mSecondaryTripletMassMin(std::numeric_limits<float>::min()), mSecondaryTripletMassMax(std::numeric_limits<float>::max()),
+  //Lomnitz
+  mSecondaryTripletDcaDaughters1Vtx(std::numeric_limits<float>::min()), mSecondaryTripletDcaDaughters2Vtx(std::numeric_limits<float>::min()),
+  mSecondaryTripletDcaDaughters3Vtx(std::numeric_limits<float>::min())
+{
   // -- constructor
 
   for (Int_t idx; idx < kHFPIDMax; ++idx) {
@@ -255,7 +264,6 @@ bool StHFCuts::isTOFHadronPID(StPicoTrack const *trk, float const & tofBeta, int
   // -- has TOF information
   if (tofBeta <= 0) 
     return false;
-  
   float ptot    = trk->dcaGeometry().momentum().mag();
   float betaInv = sqrt(ptot*ptot + mHypotheticalMass2[pidFlag]) / ptot;
   return ( fabs(1/tofBeta - betaInv) < mTOFDeltaOneOverBetaMax[pidFlag] );
@@ -341,7 +349,34 @@ bool StHFCuts::isGoodSecondaryVertexTriplet(StHFTriplet const & triplet) const {
 	   triplet.decayLength() > mSecondaryTripletDecayLengthMin && triplet.decayLength() < mSecondaryTripletDecayLengthMax &&
 	   triplet.dcaDaughters12() < mSecondaryTripletDcaDaughters12Max &&
 	   triplet.dcaDaughters23() < mSecondaryTripletDcaDaughters23Max &&
-	   triplet.dcaDaughters31() < mSecondaryTripletDcaDaughters31Max);
+	   triplet.dcaDaughters31() < mSecondaryTripletDcaDaughters31Max &&
+	   //Lomnitz
+           fabs(triplet.particle1Dca()) > mSecondaryTripletDcaDaughters1Vtx &&
+           fabs(triplet.particle2Dca()) > mSecondaryTripletDcaDaughters2Vtx &&
+           fabs(triplet.particle3Dca()) > mSecondaryTripletDcaDaughters3Vtx
+	   );
+ 
+}
+// _________________________________________________________
+bool StHFCuts::isGoodSecondaryVertexQuadruplet(StHFQuadruplet const & quadruplet) const {
+  // -- check for good secondary vertex triplet
+
+  return ( quadruplet.m() > mSecondaryQuadrupletMassMin && quadruplet.m() < mSecondaryQuadrupletMassMax &&
+	   std::cos(quadruplet.pointingAngle()) > mSecondaryQuadrupletCosThetaMin &&
+	   quadruplet.decayLength() > mSecondaryQuadrupletDecayLengthMin && quadruplet.decayLength() < mSecondaryQuadrupletDecayLengthMax &&
+	   quadruplet.dcaDaughters12() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   quadruplet.dcaDaughters13() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   quadruplet.dcaDaughters14() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   quadruplet.dcaDaughters23() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   quadruplet.dcaDaughters24() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   quadruplet.dcaDaughters34() < mSecondaryQuadrupletDcaDaughtersMax &&
+	   //Lomnitz
+           fabs(quadruplet.particle1Dca()) > mSecondaryQuadrupletDcaDaughters1Vtx &&
+           fabs(quadruplet.particle2Dca()) > mSecondaryQuadrupletDcaDaughters2Vtx &&
+           fabs(quadruplet.particle3Dca()) > mSecondaryQuadrupletDcaDaughters3Vtx &&
+           fabs(quadruplet.particle4Dca()) > mSecondaryQuadrupletDcaDaughters4Vtx
+	   );
+ 
 }
 
 // =======================================================================

@@ -32,6 +32,7 @@ class StPicoDst;
 
 class StHFPair;
 class StHFTriplet;
+class StHFQuadruplet;
 
 class StHFCuts : public TNamed
 {
@@ -108,6 +109,7 @@ class StHFCuts : public TNamed
   bool isGoodSecondaryVertexPair(StHFPair const & pair) const;
   bool isGoodTertiaryVertexPair(StHFPair const & pair) const;
   bool isGoodSecondaryVertexTriplet(StHFTriplet const & triplet) const;
+  bool isGoodSecondaryVertexQuadruplet(StHFQuadruplet const & quadruplet) const;
 
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
   
@@ -171,7 +173,13 @@ class StHFCuts : public TNamed
   
   void setCutSecondaryTriplet(float dcaDaughters12Max, float dcaDaughters23Max, float dcaDaughters31Max, 
 			      float decayLengthMin, float decayLengthMax, 
-			      float cosThetaMin, float massMin, float massMax);
+			      float cosThetaMin, float massMin, float massMax,
+			      // ---  Lomnitz added this cut
+			      float dca1vtx, float dca2vtx , float dca3vtx);
+  void setCutSecondaryQuadruplet(float dcaDaughtersMax,
+			      float decayLengthMin, float decayLengthMax, 
+			      float cosThetaMin, float massMin, float massMax,
+			      float dca1vtx, float dca2vtx , float dca3vtx, float dca4vtx);
 
   // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   
   // -- GETTER for single CUTS
@@ -291,6 +299,25 @@ class StHFCuts : public TNamed
   float mSecondaryTripletCosThetaMin;
   float mSecondaryTripletMassMin;
   float mSecondaryTripletMassMax;
+  //Lomnitz
+  float mSecondaryTripletDcaDaughters1Vtx;
+  float mSecondaryTripletDcaDaughters2Vtx;
+  float mSecondaryTripletDcaDaughters3Vtx;
+  
+  // ------------------------------------------
+  // -- Cuts of secondary triplet
+  // ------------------------------------------
+  float mSecondaryQuadrupletDcaDaughtersMax;
+  float mSecondaryQuadrupletDecayLengthMin;
+  float mSecondaryQuadrupletDecayLengthMax;
+  float mSecondaryQuadrupletCosThetaMin;
+  float mSecondaryQuadrupletMassMin;
+  float mSecondaryQuadrupletMassMax;
+  //Lomnitz
+  float mSecondaryQuadrupletDcaDaughters1Vtx;
+  float mSecondaryQuadrupletDcaDaughters2Vtx;
+  float mSecondaryQuadrupletDcaDaughters3Vtx;
+  float mSecondaryQuadrupletDcaDaughters4Vtx;
 
   ClassDef(StHFCuts,1)
 };
@@ -350,16 +377,42 @@ inline void StHFCuts::setCutTertiaryPair(float dcaDaughtersMax, float decayLengt
   mTertiaryPairDcaDaughtersMax = dcaDaughtersMax;
   mTertiaryPairDecayLengthMin = decayLengthMin; mTertiaryPairDecayLengthMax = decayLengthMax;
   mTertiaryPairCosThetaMin = cosThetaMin;
-  mTertiaryPairMassMin = massMin; mTertiaryPairMassMax = massMax; }
+  mTertiaryPairMassMin = massMin; mTertiaryPairMassMax = massMax; 
+}
   
 inline void StHFCuts::setCutSecondaryTriplet(float dcaDaughters12Max, float dcaDaughters23Max, float dcaDaughters31Max, 
 					     float decayLengthMin, float decayLengthMax, 
-					     float cosThetaMin, float massMin, float massMax)  {
+					     float cosThetaMin, float massMin, float massMax,
+					     float dca1vtx, float dca2vtx , float dca3vtx)  
+{
   mSecondaryTripletDcaDaughters12Max = dcaDaughters12Max; mSecondaryTripletDcaDaughters23Max = dcaDaughters23Max; 
   mSecondaryTripletDcaDaughters31Max = dcaDaughters31Max; 
   mSecondaryTripletDecayLengthMin = decayLengthMin; mSecondaryTripletDecayLengthMax = decayLengthMax; 
   mSecondaryTripletCosThetaMin = cosThetaMin;
-  mSecondaryTripletMassMin = massMin; mSecondaryTripletMassMax = massMax; }
+  mSecondaryTripletMassMin = massMin; mSecondaryTripletMassMax = massMax; 
+  //Lomnitz
+  mSecondaryTripletDcaDaughters1Vtx = dca1vtx;
+  mSecondaryTripletDcaDaughters2Vtx = dca2vtx;
+  mSecondaryTripletDcaDaughters3Vtx = dca3vtx;
+}
+
+inline void StHFCuts::setCutSecondaryQuadruplet(float dcaDaughtersMax,
+						float decayLengthMin, float decayLengthMax,
+						float cosThetaMin, float massMin, float massMax,
+						float dca1vtx, float dca2vtx , float dca3vtx, float dca4vtx)
+{
+  mSecondaryQuadrupletDcaDaughtersMax = dcaDaughtersMax;
+  mSecondaryQuadrupletDecayLengthMin = decayLengthMin; mSecondaryQuadrupletDecayLengthMax = decayLengthMax; 
+  mSecondaryQuadrupletCosThetaMin = cosThetaMin;
+  mSecondaryQuadrupletMassMin = massMin; mSecondaryQuadrupletMassMax = massMax; 
+  //Lomnitz
+  mSecondaryQuadrupletDcaDaughters1Vtx = dca1vtx;
+  mSecondaryQuadrupletDcaDaughters2Vtx = dca2vtx;
+  mSecondaryQuadrupletDcaDaughters3Vtx = dca3vtx;
+  mSecondaryQuadrupletDcaDaughters4Vtx = dca4vtx;
+}
+
+
 
 inline const float&    StHFCuts::cutSecondaryPairDcaDaughtersMax()       const { return mSecondaryPairDcaDaughtersMax; }
 inline const float&    StHFCuts::cutSecondaryPairDecayLengthMin()        const { return mSecondaryPairDecayLengthMin; }

@@ -19,7 +19,9 @@ StHFTriplet::StHFTriplet(): mLorentzVector(StLorentzVectorF()), mDecayVertex(StT
   mParticle3Idx(std::numeric_limits<unsigned short>::max()),
   mDcaDaughters12(std::numeric_limits<float>::max()),  mDcaDaughters23(std::numeric_limits<float>::max()),
   mDcaDaughters31(std::numeric_limits<float>::max()),
-  mCosThetaStar(std::numeric_limits<float>::quiet_NaN()){
+  mCosThetaStar(std::numeric_limits<float>::quiet_NaN()),
+  mdV0Max(std::numeric_limits<float>::quiet_NaN())
+{
 }
 
 // _________________________________________________________
@@ -29,7 +31,9 @@ StHFTriplet::StHFTriplet(StHFTriplet const * t) :
   mParticle1Dca(t->mParticle1Dca), mParticle2Dca(t->mParticle2Dca), mParticle3Dca(t->mParticle3Dca),
   mParticle1Idx(t->mParticle1Idx), mParticle2Idx(t->mParticle2Idx), mParticle3Idx(t->mParticle3Idx),
   mDcaDaughters12(t->mDcaDaughters12),  mDcaDaughters23(t->mDcaDaughters23), mDcaDaughters31(t->mDcaDaughters31), 
-  mCosThetaStar(t->mCosThetaStar){
+  mCosThetaStar(t->mCosThetaStar),
+  mdV0Max(t->mdV0Max)
+{
 }
 //------------------------------------
 StHFTriplet::StHFTriplet(StPicoTrack const * const particle1, StPicoTrack const * const particle2, StPicoTrack const * const particle3,
@@ -43,7 +47,9 @@ StHFTriplet::StHFTriplet(StPicoTrack const * const particle1, StPicoTrack const 
   mParticle1Idx(p1Idx), mParticle2Idx(p2Idx),  mParticle3Idx(p3Idx),
   mDcaDaughters12(std::numeric_limits<float>::max()), mDcaDaughters23(std::numeric_limits<float>::max()),  
   mDcaDaughters31(std::numeric_limits<float>::max()),
-  mCosThetaStar(std::numeric_limits<float>::min()) {
+  mCosThetaStar(std::numeric_limits<float>::min()),
+  mdV0Max(std::numeric_limits<float>::max())
+{
   // -- Create triplet out of 3 tracks
   //     prefixes code:
   //      p1 means particle 1
@@ -98,6 +104,18 @@ StHFTriplet::StHFTriplet(StPicoTrack const * const particle1, StPicoTrack const 
   
   // -- calculate DCA of particle3 to particle1 at their DCA
   mDcaDaughters31 = (p3AtDcaToP1 - p1AtDcaToP3).mag();
+
+  // Lomnitz: Distance between each pair vertices
+  // Distance between v12 and v23
+  float const v12 = (p1AtDcaToP2 + p2AtDcaToP1 - p2AtDcaToP3 - p3AtDcaToP2).mag()/2.0;
+  // Distance between v23 and v31
+  float const v23 = (p2AtDcaToP3 + p3AtDcaToP2 - p3AtDcaToP1 - p1AtDcaToP3).mag()/2.0;
+    // Distance between v31 and v12
+  float const v31 = (p3AtDcaToP1 + p1AtDcaToP3 - p1AtDcaToP2 - p2AtDcaToP1).mag()/2.0;
+
+  //maximum dist between reo v0's to be averaging
+  float const max12 =  v12 > v23 ? v12 : v23 ;
+  mdV0Max = max12 > v31 ? max12 : v31;
   
   // -- calculate decay vertex (secondary)
   StThreeVectorF mDecayVertex = ( p1AtDcaToP2 + p2AtDcaToP1 + p2AtDcaToP3 + p3AtDcaToP2 + p3AtDcaToP1 + p1AtDcaToP3 ) / 6.0;
