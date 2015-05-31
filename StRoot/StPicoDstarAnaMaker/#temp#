@@ -1,0 +1,20 @@
+	//Track info
+	ntVar[ii++] = Dzero.kaonDca();
+	ntVar[ii++] = Dzero.pionDca();
+	ntVar[ii++] = (pion2.origin()-primVtx).mag();
+	ntVar[ii++] = Dzero.dcaDaughters();
+	ntVar[ii++] = kaon->gPt();
+	ntVar[ii++] = pion1->gPt();
+	ntVar[ii++] = pion2->gPt();
+	//D0 information
+	ntVar[ii++] = Dzero.pointingAngle();
+	ntVar[ii++] = Dzero.decayLength();
+	ntVar[ii++] = Dzero.pt();
+	ntVar[ii++] = Dzero.m();
+	ntVar[ii++] = Dzero.eta();
+	ntVar[ii++] = Dzero.phi();
+	//Dstar info
+	ntVar[ii++] = pT;
+	ntVar[ii++] = Dstar.m();
+	ntVar[ii++] = Dstar.pseudoRapidity();
+	ntVar[ii++] = Dstar.phi();
