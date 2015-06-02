@@ -28,7 +28,8 @@ class StKaonPion;
 class StPicoDstMaker;
 class StHFCuts;
 class StHFPair;
-
+//const char *mEventCutNames[7]   = {"all", "good run", "trigger", "#it{v}_{z}", "#it{v}_{z}-#it{v}^{VPD}_{z}", "accepted", ""};
+const int mEventStatsBin = 7;
 class StPicoDstarAnaMaker : public StMaker
 {
   public:
@@ -51,6 +52,7 @@ class StPicoDstarAnaMaker : public StMaker
     bool isGoodPair(StKaonPion const*) const;
     bool isPion(StPicoTrack const * const) const;
     bool isSoftPion(StPicoTrack const * const, StThreeVectorF &) const;
+    void fillEventStats(int *aEventStat);
     StPicoDstMaker* mPicoDstMaker;
     StPicoD0Event* mPicoD0Event;
 
@@ -66,6 +68,8 @@ class StPicoDstarAnaMaker : public StMaker
     // add your member variables here. 
     // Remember that ntuples size can be really big, use histograms where appropriate
     TNtuple *ntp_DMeson;
+    TH1F *D0_sig;
+    TH1F *eventStat;
     ClassDef(StPicoDstarAnaMaker, 1)
 };
 
